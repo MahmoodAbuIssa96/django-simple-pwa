@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-def get_pwa_config():
+def get_pwa_config(request):
 	DEFAULT_CONFIG = {
 		"name": _("Progressive Web Application"),
 		"short_name": _("PWA"),
@@ -65,14 +65,16 @@ def get_pwa_config():
 		"author": _("PWA-django"),
 		}
 	try:
-		if settings.PWA_CONFIG and settings.PWA_CONFIG != {}:
+		if hasattr(settings,'GET_PWA_CONFIG'):
+			return settings.GET_PWA_CONFIG(request)
+		elif settings.PWA_CONFIG and settings.PWA_CONFIG != {}:
 			return settings.PWA_CONFIG
 	except:
 		return DEFAULT_CONFIG
 
 
 
-def get_service_worker():
+def get_service_worker(request):
 	SERVICE_WORKER = """
 var CACHE_NAME = 'pwa-cache-v1';
 var urlsToCache = [
@@ -130,13 +132,15 @@ self.addEventListener('activate', (event) =>{
 		
 		)
 	try:
-		if settings.PWA_SW and settings.PWA_SW != {}:
+		if hasattr(settings,'GET_PWA_CONFIG'):
+			return settings.GET_PWA_SW(request)
+		elif settings.PWA_SW and settings.PWA_SW != {}:
 			return settings.PWA_SW
 	except:
 		return SERVICE_WORKER
 
 
-def get_app():
+def get_app(request):
 	APP = """
 if ("serviceWorker" in navigator) {
 	window.addEventListener("load", () => {
@@ -154,7 +158,9 @@ if ("serviceWorker" in navigator) {
 		_("Your browser Doesn't Support serviceWorker, so you can'n install PWA."),
 		)
 	try:
-		if settings.PWA_APP and settings.PWA_APP != {}:
+		if hasattr(settings,'GET_PWA_CONFIG'):
+			return settings.GET_PWA_APP(request)
+		elif settings.PWA_APP and settings.PWA_APP != {}:
 			return settings.PWA_APP
 	except:
 		return APP

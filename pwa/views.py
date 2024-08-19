@@ -7,15 +7,15 @@ from pwa.defaults import get_app, get_pwa_config, get_service_worker
 
 
 def manifest_json(request):
-	return JsonResponse(get_pwa_config())
+	return JsonResponse(get_pwa_config(request))
 
 
 def sw_js(request):
-	return HttpResponse(get_service_worker() , content_type='application/javascript')
+	return HttpResponse(get_service_worker(request) , content_type='application/javascript')
 
 
 def app_js(request):
-	return HttpResponse(get_app() , content_type='application/javascript')
+	return HttpResponse(get_app(request) , content_type='application/javascript')
 	
 
 def offline(request):
