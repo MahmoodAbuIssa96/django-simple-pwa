@@ -65,8 +65,8 @@ def get_pwa_config(request):
 		"author": _("PWA-django"),
 		}
 	try:
-		if hasattr(request,'PWA_CONFIG'):
-			return getattr(request,'PWA_CONFIG')
+		if hasattr(settings,'GET_PWA_CONFIG'):
+			return getattr(settings,'GET_PWA_CONFIG')(request)
 		elif settings.PWA_CONFIG and settings.PWA_CONFIG != {}:
 			return settings.PWA_CONFIG
 	except:
@@ -132,8 +132,9 @@ self.addEventListener('activate', (event) =>{
 		
 		)
 	try:
-		if hasattr(request,'PWA_SW'):
-			return getattr(request,'PWA_SW')
+		if hasattr(settings,'GET_PWA_SW'):
+			return getattr(settings,'GET_PWA_SW')(request)
+
 		elif settings.PWA_SW and settings.PWA_SW != {}:
 			return settings.PWA_SW
 	except:
@@ -158,8 +159,8 @@ if ("serviceWorker" in navigator) {
 		_("Your browser Doesn't Support serviceWorker, so you can'n install PWA."),
 		)
 	try:
-		if hasattr(request,'PWA_APP'):
-			return getattr(request,'PWA_APP')
+		if hasattr(settings,'GET_PWA_APP'):
+			return getattr(settings,'GET_PWA_APP')(request)
 		elif settings.PWA_APP and settings.PWA_APP != {}:
 			return settings.PWA_APP
 	except:
